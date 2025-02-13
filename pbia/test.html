@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #ddd;
+        }
+        canvas {
+            background: white;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        form {
+            background: white;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Analysis Report</h2>
+
+    <h3>Add New Process</h3>
+    <form id="addProcessForm">
+        <label>Function: <input type="text" id="function" required></label>
+        <label>BCI: <input type="number" id="bci" required></label>
+        <label>Risk Exposure: <input type="text" id="risk_exposure" required></label>
+        <label>Probability of Failure: <input type="number" step="0.01" id="probability_of_failure" required></label>
+        <label>Downtime Cost: <input type="number" id="downtime_cost" required></label>
+        <label>WRT: <input type="number" id="wrt" required></label>
+        <label>MTD: <input type="number" id="mtd" required></label>
+        <label>RPO: <input type="number" id="rpo" required></label>
+        <label>RTO: <input type="number" id="rto" required></label>
+        <label>Financial Impact: <input type="number" id="financial_impact" required></label>
+        <label>Recovery Cost: <input type="number" id="recovery_cost" required></label>
+        <button type="submit">Add Process</button>
+    </form>
+
+    <table id="processTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Function</th>
+                <th>BCI</th>
+                <th>Risk Exposure</th>
+                <th>Probability of Failure</th>
+                <th>Downtime Cost</th>
+                <th>WRT</th>
+                <th>MTD</th>
+                <th>RPO</th>
+                <th>RTO</th>
+                <th>Financial Impact</th>
+                <th>Recovery Cost</th>
+                <th>Predict Impact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>IT Services</td>
+                <td>3</td>
+                <td>High</td>
+                <td>0.7</td>
+                <td>50000</td>
+                <td>0.5</td>
+                <td>72</td>
+                <td>1</td>
+                <td>4</td>
+                <td>100000</td>
+                <td>20000</td>
+                <td><button onclick="predictImpact(this)">Predict</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <canvas id="efficiencyChart"></canvas>
+
+    <script>
+        function predictImpact(button) {
+            const row = button.parentElement.parentElement;
+            const features = [
+                parseFloat(row.cells[2].textContent),  
+                parseFloat(row.cells[4].textContent),  
+                parseFloat(row.cells[5].textContent),  
+                parseFloat(row.cells[6].textContent),  
+                parseFloat(row.cells[7].textContent),  
+                parseFloat(row.cells[8].textContent)   
+            ];
+
+            fetch("http://127.0.0.1:8001/predict_impact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ features })
+            })
+            .then(response => response.json())
+            .then(data => alert(`Predicted Impact: ${data.predicted_impact}`))
+            .catch(error => console.error("Error:", error));
+        }
+
+        document.getElementById("addProcessForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const formData = {
+                function: document.getElementById("function").value,
+                bci: parseInt(document.getElementById("bci").value),
+                risk_exposure: document.getElementById("risk_exposure").value,
+                probability_of_failure: parseFloat(document.getElementById("probability_of_failure").value),
+                downtime_cost: parseFloat(document.getElementById("downtime_cost").value),
+                wrt: parseFloat(document.getElementById("wrt").value),
+                mtd: parseFloat(document.getElementById("mtd").value),
+                rpo: parseFloat(document.getElementById("rpo").value),
+                rto: parseFloat(document.getElementById("rto").value),
+                financial_impact: parseFloat(document.getElementById("financial_impact").value),
+                recovery_cost: parseFloat(document.getElementById("recovery_cost").value)
+            };
+
+            fetch("http://127.0.0.1:8001/add_process", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const table = document.getElementById("processTable").getElementsByTagName("tbody")[0];
+                const newRow = table.insertRow();
+                
+                Object.values(formData).forEach(value => {
+                    const cell = newRow.insertCell();
+                    cell.textContent = value;
+                });
+
+                const actionCell = newRow.insertCell();
+                const predictButton = document.createElement("button");
+                predictButton.textContent = "Predict";
+                predictButton.onclick = () => predictImpact(predictButton);
+                actionCell.appendChild(predictButton);
+
+                document.getElementById("addProcessForm").reset();
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        const departments = ["IT Services"];
+        const efficiency = [85];
+
+        function createChart() {
+            new Chart(document.getElementById("efficiencyChart"), {
+                type: "bar",
+                data: {
+                    labels: departments,
+                    datasets: [{
+                        label: "Efficiency (%)",
+                        data: efficiency,
+                        backgroundColor: "#4CAF50",
+                        borderColor: "#333",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        createChart();
+    </script>
+</body>
+</html>

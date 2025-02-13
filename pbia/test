@@ -1,0 +1,24 @@
+curl -X POST http://127.0.0.1:8001/add_process \
+     -H "Content-Type: application/json" \
+     -d '{
+           "function": "IT Services",
+           "bci": 3,
+           "risk_exposure": "High",
+           "probability_of_failure": 0.7,
+           "downtime_cost": 50000,
+           "wrt": 0.5,
+           "mtd": 72,
+           "rpo": 1,
+           "rto": 4,
+           "financial_impact": 100000,
+           "recovery_cost": 20000
+         }'
+
+
+
+curl -X POST http://127.0.0.1:8001/predict_impact \
+     -H "Content-Type: application/json" \
+     -d '{
+           "features": [4.058131, 3.520992, 5.020963, 52148.637621, 0.026909, 1403.260529]
+         }'
+
