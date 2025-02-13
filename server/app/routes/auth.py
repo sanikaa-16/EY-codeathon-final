@@ -18,8 +18,8 @@ def signup():
         if not all(field in data for field in required_fields):
             return jsonify({'message': 'Missing required fields'}), 400
 
-        if data['role'] not in ['Faculty', 'Student']:
-            return jsonify({'message': 'Invalid role. Must be either Faculty or Student'}), 400
+        if data['role'] not in ['Faculty', 'Student','Dean','HOD']:
+            return jsonify({'message': 'Invalid role. Must be either Faculty or Student or HOD or Student'}), 400
 
         if User.query.filter_by(college_email=data['college_email']).first():
             return jsonify({'message': 'Email already registered!'}), 400
