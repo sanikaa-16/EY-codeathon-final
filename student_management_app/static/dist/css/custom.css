@@ -1,0 +1,73 @@
+/* Black and Yellow Theme */
+
+body {
+    background-color: #000;
+    color: #FFD700;
+}
+
+.main-header {
+    background-color: #000 !important;
+    border-bottom: 2px solid #FFD700;
+}
+
+.main-header .navbar-nav .nav-link, 
+.main-header .navbar-nav .nav-item a {
+    color: #FFD700 !important;
+}
+
+.sidebar {
+    background-color: #000 !important;
+    color: #FFD700 !important;
+}
+
+.sidebar a {
+    color: #FFD700 !important;
+}
+
+.sidebar a:hover {
+    background-color: #FFD700 !important;
+    color: #000 !important;
+}
+
+.content-wrapper {
+    background-color: #000;
+    color: #FFD700;
+}
+
+.card {
+    background-color: #000 !important;
+    border: 1px solid #FFD700 !important;
+}
+
+.card-header {
+    background-color: #FFD700 !important;
+    color: #000 !important;
+}
+
+.btn-primary {
+    background-color: #FFD700 !important;
+    border-color: #FFD700 !important;
+    color: #000 !important;
+}
+
+.btn-primary:hover {
+    background-color: #000 !important;
+    color: #FFD700 !important;
+    border: 1px solid #FFD700 !important;
+}
+
+/* Change Table Styles */
+.table {
+    background-color: #000;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+}
+
+.table th {
+    background-color: #FFD700;
+    color: #000;
+}
+
+.table td {
+    border: 1px solid #FFD700;
+}
