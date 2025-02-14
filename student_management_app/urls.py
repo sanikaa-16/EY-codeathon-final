@@ -2,6 +2,10 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 from .import HodViews, StaffViews, StudentViews
+from django.urls import path
+from .views import upload_file
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,6 +16,10 @@ urlpatterns = [
     path('registration', views.registration, name="registration"),
     path('doLogin', views.doLogin, name="doLogin"),
     path('doRegistration', views.doRegistration, name="doRegistration"),
+
+    #URLS for excel uplaod 
+    path('upload_students_excel/', views.upload_students_excel, name='upload_students_excel'),
+    path("upload/", upload_file, name="upload_file"),
     
       # URLS for Student
     path('student_home/', StudentViews.student_home, name="student_home"),
@@ -96,6 +104,5 @@ urlpatterns = [
     
 
 ]
-
 
 
