@@ -3,6 +3,84 @@ from django.contrib.auth import logout, authenticate, login
 from student_management_app.models import CustomUser, Staffs, Students, AdminHOD
 from django.contrib import messages
 
+#excel uplaod
+
+import pandas as pd
+from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+from .models import Students, CustomUser, Courses, SessionYearModel
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.core.files.storage import FileSystemStorage
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
+def my_view(request):
+    return HttpResponse("CSRF is disabled for this view.")
+
+
+def upload_file(request):
+    if request.method == "POST" and request.FILES.get("uploaded_file"):
+        uploaded_file = request.FILES["uploaded_file"]
+        fs = FileSystemStorage()
+        file_name = fs.save(uploaded_file.name, uploaded_file)
+        file_url = fs.url(file_name)
+        return render(request, "hod_template/upload_success.html", {"file_url": file_url})
+    return render(request, "hod_template/upload_file.html")
+
+def upload_students_excel(request):
+    if request.method == "POST" and request.FILES.get("file"):
+        file = request.FILES["file"]
+        fs = FileSystemStorage()
+        filename = fs.save(file.name, file)
+        file_path = fs.path(filename)
+
+        try:
+            df = pd.read_excel(file_path)
+
+            for index, row in df.iterrows():
+                try:
+                    # Check if course exists
+                    course = Courses.objects.filter(id=row["Course ID"]).first()
+                    if not course:
+                        return JsonResponse({"error": f"Course ID {row['Course ID']} does not exist at row {index + 2}"}, status=400)
+
+                    # Check if session exists
+                    session = SessionYearModel.objects.filter(id=row["Session Year ID"]).first()
+                    if not session:
+                        return JsonResponse({"error": f"Session Year ID {row['Session Year ID']} does not exist at row {index + 2}"}, status=400)
+
+                    # Create user account
+                    user = CustomUser.objects.create_user(
+                        username=row["Roll Number"],  
+                        email=row["Email"],
+                        first_name=row["Name"].split()[0],  
+                        last_name=" ".join(row["Name"].split()[1:]) if len(row["Name"].split()) > 1 else "",
+                        password="defaultpassword123"
+                    )
+
+                    # Create student record
+                    Students.objects.create(
+                        admin=user,
+                        gender=row["Gender"],
+                        address=row["Address"],
+                        course_id=course,
+                        session_year_id=session
+                    )
+
+                except Exception as row_error:
+                    return JsonResponse({"error": f"Error processing row {index + 2}: {str(row_error)}"}, status=400)
+
+            return JsonResponse({"message": "Students uploaded successfully"}, status=201)
+
+        except Exception as e:
+            return JsonResponse({"error": f"Unexpected error: {str(e)}"}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+#excel upload
+
 def home(request):
 	return render(request, 'home.html')
 
