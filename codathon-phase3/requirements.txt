@@ -1,0 +1,6 @@
+FastAPI
+llama_cpp_python
+pypdf
+sentence_transformers
+chromadb
+uvicorn
