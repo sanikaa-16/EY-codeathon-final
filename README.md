@@ -125,7 +125,26 @@ To set up and run the project:
    ```
 
 ---
+## **Screenshots 
+1. Front page
+   ![Screenshot 2025-02-14 at 4 22 45 PM](https://github.com/user-attachments/assets/941e8a07-ffe1-4e97-980e-ccbdbdcd8357)
+   
+2. Login page
+   ![Screenshot 2025-02-14 at 4 22 54 PM](https://github.com/user-attachments/assets/016092a2-c95e-4e85-9fa2-de5441006c88)
 
+3. Landing page
+   ![Screenshot 2025-02-14 at 10 47 31 AM](https://github.com/user-attachments/assets/3c2bbc5f-878e-4a2f-84f2-d7a831a198f4)
+
+4. Excel and student upload
+   ![Screenshot 2025-02-14 at 10 47 09 AM](https://github.com/user-attachments/assets/fe303d46-7c17-40f3-b726-5ba9a15e491a)
+   ![Screenshot 2025-02-14 at 11 50 21 AM](https://github.com/user-attachments/assets/d8d501f1-3078-495d-9e30-6dc6b2cae7b1)
+   ![Screenshot 2025-02-14 at 10 42 16 AM](https://github.com/user-attachments/assets/67964398-4a50-45f0-9d81-8b789c30a878)
+
+5. More features
+   ![WhatsApp Image 2025-02-13 at 17 20 01](https://github.com/user-attachments/assets/0fb92a1a-9883-40bb-863a-676688095a4b)
+
+
+---
 ## **Future Enhancements**
 
 - Extending **bulk student upload** functionality to staff.
@@ -137,7 +156,11 @@ To set up and run the project:
 
 ## **Contributors**
 
-- **Sanika Kamath** and Team
+- **Sanika Kamath**
+- **Mukund Vijay**
+- **Prithviraj N**
+- **Muktha P**
+- **Muskan Agarwal**
 
 ---
 
