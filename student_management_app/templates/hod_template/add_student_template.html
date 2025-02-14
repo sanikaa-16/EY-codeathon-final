@@ -9,12 +9,12 @@
 {% load static %}
 
 <section class="content">
-        <div class="container-fluid">
+    <div class="container-fluid">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- general form elements -->
-                    <div class="card card-primary">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
                     <div class="card-header">
                         <h3 class="card-title">Add Student</h3>
                     </div>
@@ -22,88 +22,102 @@
                     <!-- form start -->
                     {% url 'add_student_save' as action_path %}
                     {% include 'hod_template/form_template.html' with messages=messages form=form action_path=action_path button_text="Add Student" %}
-
-                    </div>
-                    <!-- /.card -->
-
                 </div>
+                <!-- /.card -->
+
+                <!-- Excel Upload Section -->
+                <div class="card card-secondary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Upload Students via Excel</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="file" id="excelFile" accept=".xlsx, .xls" class="form-control mb-2">
+                        <button id="uploadExcelBtn" class="btn btn-success">Upload Excel</button>
+                        <div id="uploadMessage" class="mt-2"></div>
+                    </div>
+                </div>
+
             </div>
+        </div>
 
-        </div><!-- /.container-fluid -->
-      </section>
+    </div><!-- /.container-fluid -->
+</section>
 
-  {% endblock main_content %}
+{% endblock main_content %}
 
-  {% block custom_js %}
-    {% comment %} Checking if email and username already exists or not usin Ajax {% endcomment %}
-
-    <script>
-        $(document).ready(function(){
-            // keyup event will be triggered when user leaves keyboard
-            $("#id_email").keyup(function(){
-                var email = $(this).val();
-
-                if(email!=""){
-                    $.ajax({
-                        url : '{% url 'check_email_exist' %}',
-                        type : 'POST',
-                        data : {email:email}
-                    })
-                    .done(function(response){
-                        //console.log(response);
-
-                        if(response == "True"){
-                            $(".email_error").remove();
-                            $("<span class='email_error' style='color: red; padding: 5px; font-weight: bold;'> Email Not Available. </span>").insertAfter("#id_email")
-                        }
-                        else{
-                            $(".email_error").remove();
-                            $("<span class='email_error' style='color: green; padding: 5px; font-weight: bold;'> Email Available. </span>").insertAfter("#id_email")
-                        }
-                    })
-
-                    .fail(function(){
-                        console.log("Failed");
-                    })
-                }
-                else{
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+        // Check email availability
+        $("#id_email").keyup(function(){
+            var email = $(this).val();
+            if(email != ""){
+                $.ajax({
+                    url : '{% url 'check_email_exist' %}',
+                    type : 'POST',
+                    data : {email:email}
+                })
+                .done(function(response){
                     $(".email_error").remove();
-                }
-                
-            })
+                    if(response == "True"){
+                        $("<span class='email_error' style='color: red; padding: 5px; font-weight: bold;'> Email Not Available. </span>").insertAfter("#id_email");
+                    } else {
+                        $("<span class='email_error' style='color: green; padding: 5px; font-weight: bold;'> Email Available. </span>").insertAfter("#id_email");
+                    }
+                })
+                .fail(function(){ console.log("Failed"); });
+            } else { $(".email_error").remove(); }
+        });
 
-            $("#id_username").keyup(function(){
-                var username = $(this).val();
-                
-                if(username!=""){
-                    $.ajax({
-                        url : '{% url 'check_username_exist' %}',
-                        type : 'POST',
-                        data : {username:username}
-                    })
-                    .done(function(response){
-                        //console.log(response);
-
-                        if(response == "True"){
-                            $(".username_error").remove();
-                            $("<span class='username_error' style='color: red; padding: 5px; font-weight: bold;'> Username Not Available. </span>").insertAfter("#id_username")
-                        }
-                        else{
-                            $(".username_error").remove();
-                            $("<span class='username_error' style='color: green; padding: 5px; font-weight: bold;'> Username Available. </span>").insertAfter("#id_username")
-                        }
-                    })
-
-                    .fail(function(){
-                        console.log("Failed");
-                    })
-                }
-                else{
+        // Check username availability
+        $("#id_username").keyup(function(){
+            var username = $(this).val();
+            if(username != ""){
+                $.ajax({
+                    url : '{% url 'check_username_exist' %}',
+                    type : 'POST',
+                    data : {username:username}
+                })
+                .done(function(response){
                     $(".username_error").remove();
-                }
-                
-            })
-        })
-    </script>
+                    if(response == "True"){
+                        $("<span class='username_error' style='color: red; padding: 5px; font-weight: bold;'> Username Not Available. </span>").insertAfter("#id_username");
+                    } else {
+                        $("<span class='username_error' style='color: green; padding: 5px; font-weight: bold;'> Username Available. </span>").insertAfter("#id_username");
+                    }
+                })
+                .fail(function(){ console.log("Failed"); });
+            } else { $(".username_error").remove(); }
+        });
 
-  {% endblock custom_js %}
+        // Excel Upload
+        $("#uploadExcelBtn").click(function(){
+            var fileInput = $("#excelFile")[0].files[0];
+
+            if (!fileInput) {
+                $("#uploadMessage").html("<span style='color: red; font-weight: bold;'>Please select an Excel file.</span>");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append("file", fileInput);
+
+            $.ajax({
+                url: "{% url 'upload_students_excel' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $("#uploadMessage").html("<span style='color: green; font-weight: bold;'>"+ response.message +"</span>");
+                },
+                error: function(xhr) {
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : "Error uploading file.";
+                    $("#uploadMessage").html("<span style='color: red; font-weight: bold;'>"+ errorMessage +"</span>");
+                }
+            });
+        });
+
+    });
+</script>
+{% endblock custom_js %}
