@@ -93,6 +93,9 @@ The final phase involved analyzing the **business impact** of various processes 
 - **Machine Learning**: Naïve Bayes, LLM for querying and risk assessment
 
 Each user role has a unique dashboard, but all dashboards are built on a common **base template**.
+***
+## **RAG USING LLM TO PROVIDE SUGGESTIONS ON IMPACT ASSESSMENT**
+Retrieval-Augmented Generation (RAG) is an AI framework that enhances large language models (LLMs) like Llama 3.2 by integrating external knowledge retrieval mechanisms. This approach enables the model to fetch relevant information from external documents (e.g., research papers, reports, databases) and use that knowledge to generate more informed and contextually accurate responses.In this implementation, Llama 3.2 is used to assist in impact assessment process used in our organisation evaluate the potential effects of an action or decision. The RAG framework enables the system to retrieve relevant documents, case studies, regulations, and past assessments to provide accurate, up-to-date, and evidence-based suggestions.
 
 ---
 
@@ -159,7 +162,7 @@ To set up and run the project:
 
 - **Sanika Kamath**
 - **Mukund Vijay**
-- **Prithviraj N**
+- [**Prithiviraj N**](https://github.com/Prithiviraj25)
 - **Muktha P**
 - **Muskan Agarwal**
 
