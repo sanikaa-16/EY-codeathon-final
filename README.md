@@ -54,6 +54,7 @@ Once users log in, they access different functionalities depending on their role
 - Instead of manually searching through the database, users can **query the database** using an **LLM (Large Language Model).**
 - Example: If the HOD requires the "list of students," the LLM will directly query the database and fetch the relevant data.
 - This feature enhances efficiency by reducing manual searches on the website.
+  [follow the link for more information on the implementation](https://github.com/Prithiviraj25/query_database_using_llm)
 
 ---
 
