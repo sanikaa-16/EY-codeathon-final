@@ -54,7 +54,7 @@ Once users log in, they access different functionalities depending on their role
 - Instead of manually searching through the database, users can **query the database** using an **LLM (Large Language Model).**
 - Example: If the HOD requires the "list of students," the LLM will directly query the database and fetch the relevant data.
 - This feature enhances efficiency by reducing manual searches on the website.
-  [follow the link for more information on the implementation](https://github.com/Prithiviraj25/query_database_using_llm)
+* [follow the link for more information on the implementation](https://github.com/Prithiviraj25/query_database_using_llm)
 
 ---
 
@@ -96,6 +96,7 @@ Each user role has a unique dashboard, but all dashboards are built on a common 
 ***
 ## **RAG USING LLM TO PROVIDE SUGGESTIONS ON IMPACT ASSESSMENT**
 Retrieval-Augmented Generation (RAG) is an AI framework that enhances large language models (LLMs) like Llama 3.2 by integrating external knowledge retrieval mechanisms. This approach enables the model to fetch relevant information from external documents (e.g., research papers, reports, databases) and use that knowledge to generate more informed and contextually accurate responses.In this implementation, Llama 3.2 is used to assist in impact assessment process used in our organisation evaluate the potential effects of an action or decision. The RAG framework enables the system to retrieve relevant documents, case studies, regulations, and past assessments to provide accurate, up-to-date, and evidence-based suggestions.
+* [follow the link for more information](https://github.com/sanikaa-16/EY-codeathon-final/tree/main/codathon-phase3)
 
 ---
 
